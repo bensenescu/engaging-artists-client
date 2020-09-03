@@ -22,9 +22,9 @@ function App() {
         </a>
       </header> */}
       <div className="left-section">
-        <p class="sub-header">ARTIST FINDER</p>
-        <p class="main-title">Find musicians with your desired engagement</p>
-        <p class="sub-title">from the most popular playlists</p>
+        <p className="sub-header">ARTIST FINDER</p>
+        <p className="main-title">Find musicians with your desired engagement</p>
+        <p className="sub-title">from the most popular playlists</p>
         <SearchForm />
       </div>
       <div className="right-section">
