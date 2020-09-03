@@ -1,8 +1,59 @@
 .App {
+  display: flex;
   text-align: center;
 }
 
-.App-logo {
+.left-section {
+  width: 35%;
+  height: 100vh;
+  background-color: #c6c3fa;
+  text-align: left;
+  padding: 4em 3em;
+}
+
+.right-section {
+  width: 65%;
+  height: 100vh;
+  padding: 4em 3em;
+
+  background-color: whitesmoke;
+}
+
+.sub-header {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 16px;
+  /* identical to box height, or 114% */
+  letter-spacing: 1.4px;
+  color: #FFFCDE;
+}
+
+.main-title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 48px;
+  line-height: 48px;
+  /* or 100% */
+
+  letter-spacing: -0.04em;
+  color: #000000;  
+}
+
+.sub-title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  padding-left: 1.5em;
+  /* identical to box height, or 150% */
+  color: #FFFCDE;
+}
+
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -35,4 +86,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

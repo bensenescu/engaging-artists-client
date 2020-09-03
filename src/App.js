@@ -1,11 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+import ArtistTable from './components/artist-table/artist-table';
+import SearchForm from './components/search-form/search-form';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -18,7 +20,16 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      <div className="left-section">
+        <p class="sub-header">ARTIST FINDER</p>
+        <p class="main-title">Find musicians with your desired engagement</p>
+        <p class="sub-title">from the most popular playlists</p>
+        <SearchForm />
+      </div>
+      <div className="right-section">
+        <ArtistTable></ArtistTable>
+      </div>
     </div>
   );
 }
