@@ -1,61 +1,40 @@
-import React from "react"
+import React, { useState } from "react"
 import { Form, Input, Button } from 'antd';
 
-class SearchForm extends React.Component{
-  constructor(props) {
-    super(props);
+function SearchForm(props) {
+  const [minFollowers, setMinFollowers] = useState(0);
+  const [maxFollowers, setMaxFollowers] = useState(0);
+  const [minEngagementRate, setMinEngagementRate] = useState(0);
 
-    this.state = {
-      min_followers: 0,
-      max_followers: Number.MAX_SAFE_INTEGER,
-      min_engagement_rate: 0
-    };
-    
-    this.handleInputChange = this.handleInputChange.bind(this)
-  }
-
-  handleInputChange({ target }) {
-    const { value, name } = target
-
-    this.setState({
-      [name]: parseFloat(value),
-    });
-  }
-
-  render() {
-    return (
-      <Form>
-        <Form.Item label="Minimum Followers:">
-          <Input 
-            name="min_followers" 
-            type="number"
-            onChange={this.handleInputChange}
-            />
-        </Form.Item>
-        <Form.Item label="Maximum Followers:">
-          <Input 
-            name="max_followers" 
-            type="number"
-            onChange={this.handleInputChange}
-            />
-        </Form.Item>
-        <Form.Item label="Engagement Rate:">
-          <Input 
-            name="min_engagement_rate"
-            type="number"
-            min="1"
-            max="100"
-            onChange={this.handleInputChange}
-            />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" onClick={() => this.props.handleClick(this.state)}>
-            Submit
+  return (
+    <Form>
+      <Form.Item label="Minimum Followers:">
+        <Input
+          type="number"
+          onChange={({ target }) => setMinFollowers(parseFloat(target.value))}
+        />
+      </Form.Item>
+      <Form.Item label="Maximum Followers:">
+        <Input
+          type="number"
+          onChange={({ target }) => setMaxFollowers(parseFloat(target.value))}
+        />
+      </Form.Item>
+      <Form.Item label="Engagement Rate:">
+        <Input
+          type="number"
+          min="1"
+          max="100"
+          onChange={({ target }) => setMinEngagementRate(parseFloat(target.value))}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" onClick={() => props.handleClick({ minFollowers, maxFollowers, minEngagementRate })}>
+          Submit
           </Button>
-        </Form.Item>
-      </Form>
-    )
-  }
+      </Form.Item>
+    </Form>
+  )
 }
 
 export default SearchForm;

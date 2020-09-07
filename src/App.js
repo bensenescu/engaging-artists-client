@@ -10,22 +10,23 @@ class App extends React.Component {
 
     this.state = {
       search_params: {
-        min_followers: 0,
-        max_followers: 0,
-        min_engagement_rate: 0
+        minFollowers: 0,
+        maxFollowers: 0,
+        minEngagementRate: 0
       },
     };
 
     this.handleClick = this.handleClick.bind(this);
   }
   
-  handleClick({min_followers, max_followers, min_engagement_rate}) {
-    const engagement_rate = (min_engagement_rate / 100).toFixed(2);
+  handleClick({minFollowers, maxFollowers, minEngagementRate}) {
+    const engagement_rate = (minEngagementRate / 100).toFixed(2);
+    console.log('clicked')
 
     this.setState({search_params: {
-      min_followers,
-      max_followers,
-      min_engagement_rate: engagement_rate
+      minFollowers,
+      maxFollowers,
+      minEngagementRate: engagement_rate
     }});
   }
  

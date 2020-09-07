@@ -14,9 +14,10 @@ class ArtistTable extends React.Component {
   }
 
   updateArtists() {
+    console.log(this.props.search_params.minFollowers, this.props.search_params.maxFollowers)
     firebase.collection('artists')
-      .where("followers", ">", this.props.search_params.min_followers)
-      .where("followers", "<", this.props.search_params.max_followers)
+      .where("followers", ">", this.props.search_params.minFollowers)
+      .where("followers", "<", this.props.search_params.maxFollowers)
       .limit(100)
       .get()
       .then((res) => {
@@ -26,12 +27,11 @@ class ArtistTable extends React.Component {
 
         const engagingArtists = []
         docs.forEach((doc) => {
-          if (doc.data().engagement_rate > this.props.search_params.min_engagement_rate) {
+          if (doc.data().engagement_rate > this.props.search_params.minEngagementRate) {
             engagingArtists.push(doc.data())
           }
         })
         
-
         const engagingArtistsFormatted = engagingArtists.map(({
           avg_comments,
           avg_likes,
