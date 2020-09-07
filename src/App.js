@@ -13,7 +13,6 @@ function App() {
   
   const handleClick = ({minFollowers, maxFollowers, minEngagementRate}) => {
     const engagementRate = (minEngagementRate / 100).toFixed(2);
-    console.log('clicked')
 
     setSearchParams({
       minFollowers,
