@@ -10,68 +10,85 @@ class ArtistTable extends React.Component {
     this.state = {
       artists: []
     }
+    this.updateArtists = this.updateArtists.bind(this)
   }
 
-  async componentDidMount() {
-    const docs = await firebase.collection('artists')
-      .where("followers", ">", 0)
-      .where("followers", "<", 1000000)
+  updateArtists() {
+    firebase.collection('artists')
+      .where("followers", ">", this.props.search_params.min_followers)
+      .where("followers", "<", this.props.search_params.max_followers)
+      .limit(100)
       .get()
-    
-    if(docs.empty) console.error('No artists fit this descriptiondocs.')
-    
-    const engagingArtists = []
-    docs.forEach((doc) => {
-      if (doc.data().engagement_rate > 0.01) {
-        engagingArtists.push(doc.data())
-      }
-    })
-  
-    const engagingArtistsFormatted = engagingArtists.map(({
-      avg_comments,
-      avg_likes,
-      engagement_rate,
-      followers,
-      following,
-      genre,
-      ig_handle,
-      media_uploads,
-      song_listens,
-      song_name,
-      soundcloud_name,
-      timestamp,
-    }) => {
-        return {
+      .then((res) => {
+        if (res.empty) console.error('No artists fit this description.')
+
+        const { docs } = res;
+
+        const engagingArtists = []
+        docs.forEach((doc) => {
+          if (doc.data().engagement_rate > this.props.search_params.min_engagement_rate) {
+            engagingArtists.push(doc.data())
+          }
+        })
+        
+
+        const engagingArtistsFormatted = engagingArtists.map(({
           avg_comments,
           avg_likes,
-          engagement_rate: (engagement_rate * 100).toFixed(2) + '%',
+          engagement_rate,
           followers,
           following,
-          genre: genre?.W_?.H ?? genre,
-          ig_handle: ig_handle?.W_?.H ?? ig_handle ,
+          genre,
+          ig_handle,
           media_uploads,
           song_listens,
-          song_name: song_name?.W_?.H ?? song_name,
-          soundcloud_name: soundcloud_name?.W_?.H ?? soundcloud_name,
-          timestamp: timestamp?.W_?.H,
-          engaged_fans: Math.floor(followers * engagement_rate),
-        }
-    });
+          song_name,
+          soundcloud_name,
+          timestamp,
+        }) => {
+          return {
+            avg_comments,
+            avg_likes,
+            engagement_rate: (engagement_rate * 100).toFixed(2) + '%',
+            followers,
+            following,
+            genre: genre?.W_?.H ?? genre,
+            ig_handle: ig_handle?.W_?.H ?? ig_handle,
+            media_uploads,
+            song_listens,
+            song_name: song_name?.W_?.H ?? song_name,
+            soundcloud_name: soundcloud_name?.W_?.H ?? soundcloud_name,
+            timestamp: timestamp?.W_?.H,
+            engaged_fans: Math.floor(followers * engagement_rate),
+          }
+        });
 
-    this.setState({artists: engagingArtistsFormatted});
+        this.setState({artists: engagingArtistsFormatted});
+      })
+      .catch((err) => console.error(err));
   }
+
+  componentDidMount() {
+    this.updateArtists()
+  }
+  
+  componentDidUpdate(prevProps) {
+    if(this.props.search_params !== prevProps.search_params) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+    {
+      this.updateArtists();
+    }
+  } 
+
   
   render() {
     const columns = [
       {
         title: 'Soundcloud Name',
         dataIndex: 'soundcloud_name',
-        key: 'soundcloud_name',
       },
       {
         title: 'Instagram Link',
         dataIndex: 'ig_handle',
-        key: 'ig_handle',
         render: (text, record) => (
           <a href={`https://www.instagram.com/${record.ig_handle}`}>{record.ig_handle}</a>
         )
@@ -79,22 +96,28 @@ class ArtistTable extends React.Component {
       {
         title: 'IG Posts',
         dataIndex: 'media_uploads',
-        key: 'media_uploads',
       },
       {
         title: 'Followers',
         dataIndex: 'followers',
-        key: 'followers',
+        sorter: {
+          compare: (a, b) => b.followers - a.followers
+        },
       },
       { 
         title: 'Engagement Rate',
         dataIndex: 'engagement_rate',
-        key: 'engagement_rate',
+        sorter: {
+          compare: (a, b) => b.engagement_rate - a.engagement_rate,
+        },
       },
       { 
         title: 'Engaged Fans',
         dataIndex: 'engaged_fans',
-        key: 'engaged_fans',
+        sorter: {
+          compare: (a, b) => b.engaged_fans - a.engaged_fans,
+          multiple: 1,
+        },
       }
     ];
   

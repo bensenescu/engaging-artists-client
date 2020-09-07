@@ -1,38 +1,57 @@
-import React, { useState } from "react"
-import { Form, Input } from 'antd';
+import React from "react"
+import { Form, Input, Button } from 'antd';
 
-// const SearchForm = () => {
-//   const [min_followers, set_min_followers] = useState(0);
-//   const [min_followers, set_min_followers] = useState(0);
-//   const [min_followers, set_min_followers] = useState(0);
-
-
-// }
-
-class SearchForm extends React.Component {
+class SearchForm extends React.Component{
   constructor(props) {
     super(props);
 
     this.state = {
-      search_params: {
-        min_followers: 0,
-        max_followers: Number.MAX_SAFE_INTEGER,
-        min_engagement_rate: 0
-      },
-    }
+      min_followers: 0,
+      max_followers: Number.MAX_SAFE_INTEGER,
+      min_engagement_rate: 0
+    };
+    
+    this.handleInputChange = this.handleInputChange.bind(this)
+  }
+
+  handleInputChange({ target }) {
+    const { value, name } = target
+
+    this.setState({
+      [name]: parseFloat(value),
+    });
   }
 
   render() {
     return (
       <Form>
         <Form.Item label="Minimum Followers:">
-          <Input placeholder="input placeholder" />
+          <Input 
+            name="min_followers" 
+            type="number"
+            onChange={this.handleInputChange}
+            />
         </Form.Item>
         <Form.Item label="Maximum Followers:">
-          <Input placeholder="input placeholder" />
+          <Input 
+            name="max_followers" 
+            type="number"
+            onChange={this.handleInputChange}
+            />
         </Form.Item>
         <Form.Item label="Engagement Rate:">
-          <Input placeholder="input placeholder" />
+          <Input 
+            name="min_engagement_rate"
+            type="number"
+            min="1"
+            max="100"
+            onChange={this.handleInputChange}
+            />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={() => this.props.handleClick(this.state)}>
+            Submit
+          </Button>
         </Form.Item>
       </Form>
     )
