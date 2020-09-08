@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
+// @ts-ignore
 import ArtistTable from './components/artist-table/artist-table.tsx';
+// @ts-ignore
 import SearchForm from './components/search-form/search-form.tsx';
 import { ISearchParams } from './ts/interfaces';
 

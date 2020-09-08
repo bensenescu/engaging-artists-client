@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// @ts-ignore
 import db from '../../firebase.tsx';
 import { Table } from 'antd';
 import { ISearchParams, IArtist } from '../../ts/interfaces'
