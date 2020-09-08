@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import firebase from '../../firebase';
-
+import db from '../../firebase.tsx';
 import { Table } from 'antd';
+import { ISearchParams, IArtist } from '../../ts/interfaces'
 
-function ArtistTable(props) {
-  const [artists, setArtists] = useState([]);
+import * as firebase from 'firebase/app';
+
+interface PropTypes {
+  searchParams: ISearchParams
+}
+
+function ArtistTable(props: PropTypes) {
+  const [artists, setArtists] = useState<Array<IArtist>>([]);
   
   useEffect(() => {
-    firebase.collection('artists')
+    db.collection('artists')
       .where("followers", ">", props.searchParams.minFollowers)
       .where("followers", "<", props.searchParams.maxFollowers)
       .limit(100)
       .get()
-      .then((res) => {
+      .then((res: firebase.firestore.DocumentData) => {
         if (res.empty) console.error('No artists fit this description.')
 
         const { docs } = res;
 
-        const engagingArtists = []
-        docs.forEach((doc) => {
+        const engagingArtists: Array<firebase.firestore.DocumentData> = []
+        
+        docs.forEach((doc: firebase.firestore.DocumentData) => {
           if (doc.data().engagement_rate > props.searchParams.minEngagementRate) {
             engagingArtists.push(doc.data())
           }
@@ -28,10 +35,10 @@ function ArtistTable(props) {
 
         setArtists(engagingArtistsFormatted);
       })
-      .catch((err) => console.error(err));
+      .catch((err: any) => console.error(err));
   }, [props.searchParams])
 
-  const formatFirebaseData = (artists) => {
+  const formatFirebaseData = (artists: Array<firebase.firestore.DocumentData>) => {
     return artists.map(({
       avg_comments,
       avg_likes,
@@ -45,7 +52,7 @@ function ArtistTable(props) {
       song_name,
       soundcloud_name,
       timestamp,
-    }) => {
+    }): IArtist => {
       return {
         avg_comments,
         avg_likes,
@@ -64,7 +71,7 @@ function ArtistTable(props) {
     });
   }
 
-  const columns = [
+  const columns : any = [
     {
       title: 'Soundcloud Name',
       dataIndex: 'soundcloud_name',
@@ -72,7 +79,7 @@ function ArtistTable(props) {
     {
       title: 'Instagram Link',
       dataIndex: 'ig_handle',
-      render: (text, record) => (
+      render: (text: string, record: any) => (
         <a href={`https://www.instagram.com/${record.ig_handle}`}>{record.ig_handle}</a>
       )
     },
@@ -84,21 +91,21 @@ function ArtistTable(props) {
       title: 'Followers',
       dataIndex: 'followers',
       sorter: {
-        compare: (a, b) => b.followers - a.followers
+        compare: (a: any, b: any) => b.followers - a.followers
       },
     },
     { 
       title: 'Engagement Rate',
       dataIndex: 'engagement_rate',
       sorter: {
-        compare: (a, b) => b.engagement_rate - a.engagement_rate,
+        compare: (a: any, b: any) => parseFloat(b.engagement_rate.slice(0, -1)) - parseFloat(a.engagement_rate.slice(0, -1)),
       },
     },
     { 
       title: 'Engaged Fans',
       dataIndex: 'engaged_fans',
       sorter: {
-        compare: (a, b) => b.engaged_fans - a.engaged_fans,
+        compare: (a: any, b: any) => b.engaged_fans - a.engaged_fans,
         multiple: 1,
       },
     }

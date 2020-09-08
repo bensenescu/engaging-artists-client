@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
-import ArtistTable from './components/artist-table/artist-table';
-import SearchForm from './components/search-form/search-form';
+import ArtistTable from './components/artist-table/artist-table.tsx';
+import SearchForm from './components/search-form/search-form.tsx';
+import { ISearchParams } from './ts/interfaces';
 
 function App() {
-  const [searchParams, setSearchParams] = useState({
+  const [searchParams, setSearchParams] = useState<ISearchParams>({
     minFollowers: 0,
     maxFollowers: 0,
     minEngagementRate: 0
   })
   
-  const handleClick = ({minFollowers, maxFollowers, minEngagementRate}) => {
-    const engagementRate = (minEngagementRate / 100).toFixed(2);
+  const handleClick = (searchParams: ISearchParams) => {
+    const engagementRate = parseFloat((searchParams.minEngagementRate / 100).toFixed(2));
 
     setSearchParams({
-      minFollowers,
-      maxFollowers,
-      minEngagementRate: engagementRate
+      minFollowers: searchParams.minFollowers,
+      maxFollowers: searchParams.maxFollowers,
+      minEngagementRate: engagementRate,
     });
   }
 
@@ -30,7 +31,6 @@ function App() {
         <div style={{paddingTop: '4em'}}>
           <SearchForm handleClick={handleClick}/>
         </div>
-        
       </div>
       <div className="right-section">
         <ArtistTable searchParams={searchParams}></ArtistTable>
