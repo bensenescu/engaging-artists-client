@@ -1,10 +1,15 @@
 import React, { useState } from "react"
 import { Form, Input, Button } from 'antd';
+import { ISearchParams } from '../../ts/interfaces';
 
-function SearchForm(props) {
-  const [minFollowers, setMinFollowers] = useState(0);
-  const [maxFollowers, setMaxFollowers] = useState(0);
-  const [minEngagementRate, setMinEngagementRate] = useState(0);
+interface PropTypes {
+  handleClick: (searchParams: ISearchParams) => void,
+}
+
+function SearchForm(props: PropTypes) {
+  const [minFollowers, setMinFollowers] = useState<number>(0);
+  const [maxFollowers, setMaxFollowers] = useState<number>(0);
+  const [minEngagementRate, setMinEngagementRate] = useState<number>(0);
 
   return (
     <Form>
